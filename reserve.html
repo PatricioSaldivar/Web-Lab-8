@@ -60,7 +60,7 @@
                 <label for="reserve-unique-id">Unique ID</label>
                 <input type="text" class="form-control" id="reserve-unique-id">
               </div>
-              <button type="submit" class="btn btn-primary submit">Submit</button>
+              <button type="submit" id="reserve" class="btn btn-primary submit">Submit</button>
             </form>
           </div>
         </div>
@@ -84,6 +84,30 @@
 
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS SENT TO OUR SERVER -->
 <script type="text/javascript">
+ $("#reserve").on("click", function (event) {
+    event.preventDefault();
+    let name = $("#reserve-name").val().trim();
+    let phone = $("#reserve-phone").val().trim();
+    let email = $("#reserve-email").val().trim();
+    let id = $("#reserve-unique-id").val().trim();
 
+      var newReservation = {
+        name: name,
+        phone: phone,
+        email: email,
+        id: id,
+      };
+
+      $.post("/api/reserve", newReservation).then(function (data, err) {
+        console.log(data);
+        console.log("reservation:", data);
+        alert(data.message);
+        $("#reserve-name").val("");
+        $("#reserve-phone").val("");
+        $("#reserve-email").val("");
+        $("#reserve-unique-id").val("");
+      });
+    
+ });
 
 </script>

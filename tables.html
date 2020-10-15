@@ -58,7 +58,7 @@
     <footer class="footer mt-4">
       <div class="container">
         <p>Control Panel</p>
-        <p><a href="#" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API
+        <p><a href="/tables" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API
             Wait List</a>
       </div>
     </footer>
@@ -70,7 +70,64 @@
 
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS LOADED FROM OUR SERVER -->
 <script type="text/javascript">
+   $.get("/api/tables", function (data) {
+      let list = $("#tableList");
+      if (data.length > 0) {
+        data.forEach((item, index) => {
+          list.append(`
+            <li class="list-group-item mt-4" style="margin-top:10px">
+              <h2 >Table # ${index + 1}</h2>
+              <hr>
+              <h2>ID: <span id="ix">${item.id}</span> </h2>
+              <h2>Name: ${item.name} </h2>
+              <h2>Email: ${item.email}</h2>
+              <h2>Phone: ${item.phone}</h2>
+              <a href="/tables"><button class="btn btn-sm btn-warning" id="check-off">
+              Check off
+            </button></a>
+            </li>`);
+        });
+      } else {
+        list.append("There are no reservations.");
+      }
+    });
+    $.get("/api/waitlist", function (data) {
+      let list = $("#waitList");
+      if (data.length > 0) {
+        data.forEach((item, index) => {
+          list.append(`
+            <li class="list-group-item" style="margin-top:10px">
+              <h2>Table # ${index + 1}</h2>
+              <hr>
+              <h2>ID: ${item.id} </h2>
+              <h2>Name: ${item.name} </h2>
+              <h2>Email: ${item.email}</h2>
+              <h2>Phone: ${item.phone}</h2>
+            </li>`);
+        });
+      } else {
+        list.append("There are no one in the wait list.");
+      }
+    });
+    $("#clear").on("click", function (event) {
+      
+      $.ajax({
+        url: "/api/clear",
+        type: "DELETE",
+        success: function (result) {
+        },
+      });
+    });
 
+    $("#tableList").on("click", "a", function (event) {
+      let id = $(this).parent().find("#ix").text();
+      $.ajax({
+        url: `/api/tables/${id}`,
+        type: "DELETE",
+        success: function (result) {
+        },
+      });
+    });
 
 
 
