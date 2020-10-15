@@ -99,8 +99,6 @@
       };
 
       $.post("/api/reserve", newReservation).then(function (data, err) {
-        console.log(data);
-        console.log("reservation:", data);
         alert(data.message);
         $("#reserve-name").val("");
         $("#reserve-phone").val("");
